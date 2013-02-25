@@ -29,6 +29,13 @@
  * @subpackage	Tx_Format
  */
 class Tx_Format_Service_CsvService {
+
+	protected $data = array();
+
+
+	/*** 
+	 * Part 1... Parsing
+	 ***/
 	protected static $delimiters = array(',', ';', "\t", ' ');
 	protected static $qualifiers = array('"', '\'');
 
@@ -89,16 +96,53 @@ class Tx_Format_Service_CsvService {
 		return $recordsStack;
 	}
 
+
+	/*** 
+	 * Part 2... Creating
+	 ***/
+
+	public function addData($data) {
+		$this->data[] = $data;
+	}
+
+
+	public function setData($data) {
+		$this->data = (is_array($data) ? $data : array());
+	}
+	
+	
+	protected function prepareDataAsString($data, $delimiter = ';', $linedelimiter = NULL, $convertToLatin = TRUE) {
+		$content = '';
+		if ($linedelimiter === NULL) {
+			$linedelimiter = chr(10);
+		}
+		// make a string out of the array
+		foreach ($data as $row) {
+			if (is_array($row)) {
+				foreach ($row as &$field) {
+					$field = $this->formatValue($field, $delimiter);
+				}
+				$content .= implode($delimiter, $row) . $linedelimiter;
+			}
+		}
+
+		$content = trim($content);
+		if ($convertToLatin) {
+			$content = utf8_decode($content);
+		}
+		return $content;
+	}
+
 	/**
 	 * sends the CSV data to the client, where $csvData is a single-level array
 	 * 
 	 * @param array $csvData the array with the data, will be separated with csv
 	 */
-	public static function outputCsvData($csvData, $fileName = 'export') {
-		if (is_array($csvData)) {
-			$csvData = implode(chr(10), $csvData);
-		}
-		$file = $fileName . '_' . date('Ymd') . '.csv';
+	public function saveToOutput($filename = 'export') {
+
+		$content = $this->prepareDataAsString($this->data);
+
+		$filename .= '_' . date('Ymd') . '.csv';
 		
 		header('Pragma: public');
 		header('Expires: 0');
@@ -109,12 +153,12 @@ class Tx_Format_Service_CsvService {
 		// it will be called like the file itself, can also be changed
 		$agent = strtolower(t3lib_div::getIndpEnv('HTTP_USER_AGENT'));
 		$dispo = (strpos($agent, 'win') !== false && strpos($agent, 'msie') !== false) ? '' : 'attachment; ';
-		header('Content-Disposition: ' . $dispo . 'filename="' . $file . '"');
+		header('Content-Disposition: ' . $dispo . 'filename="' . $filename . '"');
 		header('Content-Transfer-Encoding: binary');
-		header('Content-Length: ' . strlen($csvData));
+		header('Content-Length: ' . strlen($content));
 
 		// -- render the data --
-		echo $csvData;
+		echo $content;
 		exit;
 	}
 	
@@ -123,15 +167,27 @@ class Tx_Format_Service_CsvService {
 	 * 
 	 * @param array $csvData the array with the data, will be separated with csv
 	 */
-	public static function createCsvFile($csvData, $directoryName, $fileName) {
-		if (is_array($csvData)) {
-			$csvData = implode(chr(10), $csvData);
-		}
-		$file = $fileName . '_' . date('Ymd') . '.csv';
+	public function saveToFile($directoryName, $filename) {
+
+		$content = $this->prepareDataAsString($this->data);
+
+		$filename .= '_' . date('Ymd') . '.csv';
 		
 		// save the file to the file system as well
-		$fullFile = rtrim($directoryName, '/') . '/' . $file;
+		$fullFile = rtrim($directoryName, '/') . '/' . $filename;
 		t3lib_div::writeFile($fullFile, $csvData);
 		return $fullFile;
+	}
+
+	/**
+	 * formats a value to be compatible with the CSV output
+	 * 
+	 * @param mixed $value
+	 * @return string
+	 */
+	protected function formatValue($value, $delimiter = ';') {
+		$value = str_replace($delimiter, '\\' . $delimiter, $value);
+		$value = str_replace('"', '""', $value);
+		return '"' . $value . '"';
 	}
 }
