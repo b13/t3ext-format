@@ -208,8 +208,11 @@ class Tx_Format_Service_ExcelService {
 	/**
 	 * saves it to file
 	 */
-	public function saveToFile($filename) {
-		// @todo
+	public function saveToFile($directoryName, $filename) {
+		$filename .= '_' . date('Ymd') . '.xlsx';
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excelObj, 'Excel2007');
+		$objWriter->save($directoryName . $filename);
+		return $directoryName . $filename;
 	}
 
 	/**

@@ -14,8 +14,8 @@ $EM_CONF[$_EXTKEY] = array (
 	'title' => 'External Format Services for PDF, Excel and CSV creation',
 	'description' => 'Includes simple service classes to create CSV, Excel and PDF files.',
 	'category' => 'misc',
-	'author' => 'b:dreizehn GmbH',
-	'author_email' => 'typo3@b13.de',
+	'author' => 'Benjamin Mack',
+	'author_email' => 'benjamin.mack@b13.de',
 	'shy' => '',
 	'dependencies' => '',
 	'conflicts' => '',
@@ -28,12 +28,13 @@ $EM_CONF[$_EXTKEY] = array (
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'author_company' => '',
-	'version' => '1.1.0',
+	'author_company' => 'b:dreizehn, Stuttgart',
+	'version' => '1.1.1',
 	'constraints' => 
 	array (
 		'depends' => 
 		array (
+			'typo3' => '4.5.0-6.1.99'
 		),
 		'conflicts' => 
 		array (
