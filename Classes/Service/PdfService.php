@@ -48,6 +48,14 @@ class Tx_Format_Service_PdfService {
 	}
 	
 	/**
+	 * sets a different papersize
+	 *
+	 */
+	public function setPapersize($papersize, $format = 'portrait') {
+		$this->pdfObject->set_paper($papersize, $format);
+	}
+
+	/**
 	 * sets the data
 	 */
 	public function setData($data) {
