@@ -137,10 +137,14 @@ class Tx_Format_Service_CsvService {
 	 * sends the CSV data to the client, where $csvData is a single-level array
 	 * 
 	 * @param array $csvData the array with the data, will be separated with csv
+	 * @param string $delimiter
+	 * @param string $linedelimiter
+	 * @param boolean $convertToLatin
+	 *
 	 */
-	public function saveToOutput($filename = 'export') {
+	public function saveToOutput($filename = 'export', $delimiter = ';', $linedelimiter = NULL, $convertToLatin = TRUE) {
 
-		$content = $this->prepareDataAsString($this->data);
+		$content = $this->prepareDataAsString($this->data, $delimiter, $linedelimiter, $convertToLatin);
 
 		$filename .= '_' . date('Ymd') . '.csv';
 		
@@ -148,7 +152,13 @@ class Tx_Format_Service_CsvService {
 		header('Expires: 0');
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Cache-Control: private', false);
-		header('Content-Type: text/csv; charset=utf-8');
+
+		// define the charset depending on the $convertToLatin parameter
+		if ($convertToLatin) {
+			header('Content-Type: text/csv; charset=iso-8859-15');
+		} else {
+			header('Content-Type: text/csv; charset=utf-8');
+		}
 
 		// it will be called like the file itself, can also be changed
 		$agent = strtolower(t3lib_div::getIndpEnv('HTTP_USER_AGENT'));
@@ -175,7 +185,7 @@ class Tx_Format_Service_CsvService {
 		
 		// save the file to the file system as well
 		$fullFile = rtrim($directoryName, '/') . '/' . $filename;
-		t3lib_div::writeFile($fullFile, $csvData);
+		t3lib_div::writeFile($fullFile, $content);
 		return $fullFile;
 	}
 
