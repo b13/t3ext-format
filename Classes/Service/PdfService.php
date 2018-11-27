@@ -1,75 +1,158 @@
 <?php
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2012 b:dreizehn GmbH <typo3@b13.de>
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+namespace B13\Format\Service;
+
+use B13\Format\Pdf\PdfSettings;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+
 /**
- * Class to create a pdf and output it 
+ * Class to create a pdf and output it
  *
  * @author	b:dreizehn GmbH <typo3@b13.de>
  * @package	TYPO3
- * @subpackage	Tx_Format
+ * @subpackage	tx_format
  */
-class Tx_Format_Service_PdfService {
+class PdfService
+{
+    /**
+     * holds the PDF object
+     */
+    protected $pdfObject;
 
-	/**
-	 * holds the PDF object
-	 */
-	protected $pdfObject;
+    /**
+     * @var PdfSettings
+     */
+    protected $settings = null;
 
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $configurationManager = $objectManager->get(ConfigurationManager::class);
+        $settings = $configurationManager->getConfiguration(
+        ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+        'format'
+        );
+        $this->setSettings($settings['pdf'] ?? []);
+    }
 
-	/**
-	 *
-	 */
-	public function __construct() {
-			// load PHPExcel
-		require_once(t3lib_extMgm::extPath('format', 'Contrib/dompdf/dompdf_config.inc.php'));
-		$this->pdfObject = new DOMPDF();
-		$this->pdfObject->set_paper('A4', 'portrait');
-		$this->pdfObject->set_base_path(PATH_site);
-	}
-	
-	/**
-	 * sets a different papersize
-	 *
-	 */
-	public function setPapersize($papersize, $format = 'portrait') {
-		$this->pdfObject->set_paper($papersize, $format);
-	}
+    /**
+     * Set the settings
+     *
+     * @param array $settings
+     * @return $this
+     */
+    public function setSettings(array $settings)
+    {
+        if (!isset($this->settings)) {
+            $this->settings = GeneralUtility::makeInstance(PdfSettings::class);
+        }
+        $this->settings->setProperties($settings);
+        return $this;
+    }
 
-	/**
-	 * sets the data
-	 */
-	public function setData($data) {
-		$this->pdfObject->load_html($data);
-	}
+    /**
+     * sets the PDF content
+     * @param string $content
+     */
+    public function setContent(string $content)
+    {
+        $this->settings->setContent($content);
+    }
 
+    /**
+     * @param $fileName
+     * @return void
+     */
+    public function saveToOutput(string $fileName)
+    {
+        $absoluteFilePath = $this->saveToFile($fileName);
+        header('Pragma: no-cache', true);
+        header('Expires: 0', true);
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0', true);
+        header('Cache-Control :private');
+        header('Content-Type: application/pdf', true);
 
-	public function saveToOutput($filename) {
-		$this->pdfObject->render();
-		$this->pdfObject->stream($filename . '.pdf');
-	}
-	
-	public function saveToFile($filename) {
-		// @todo
-	}
+        $agent = strtolower(GeneralUtility::getIndpEnv('HTTP_USER_AGENT'));
+        $dispo = (strpos($agent, 'win') !== false && strpos($agent, 'msie') !== false) ? '' : 'attachment; ';
 
+        header('Content-Transfer-Encodin :binary', true);
+        header('Content-Disposition: ' . $dispo . 'filename="' . $fileName . '"', true);
+        header('Content-Length: ' . filesize($absoluteFilePath), true);
+
+        ob_clean();
+        readfile($absoluteFilePath);
+        exit;
+    }
+
+    /**
+     * @param string $filename
+     * @return string
+     * @throws \B13\Format\Exception
+     */
+    public function saveToFile(string $filename = ''): string
+    {
+        $this->createTempDirectory();
+
+        if (!empty($filename)) {
+            $this->settings->setTempFileName($filename);
+        }
+
+        $contentParameter = $this->getContentParameter();
+        $command = $this->settings->getAbsoluteBinaryFilePath() .
+            $this->settings->getPrintMediaTypeAttribute() .
+            $this->settings->getLowQualityAttribute() .
+            $this->settings->getFooterHtmlAttribute() .
+            $this->settings->getMinimumFontSizeAttribute() .
+            $this->settings->getJavaScriptDelayAttribute() .
+            $this->settings->getOrientationAttribute() .
+            $this->settings->getMarginAttributes() .
+            $this->settings->getPageSizeAttribute() .
+            ' ' . $contentParameter . ' ' . $this->settings->getAbsoluteTempFilePath();
+
+        exec($command, $res, $ret);
+        if ($ret !== 0) {
+            throw new \B13\Format\Exception('cannot execute ' . $command, 1508825188);
+        }
+        return $this->settings->getAbsoluteTempFilePath();
+    }
+
+    /**
+     * Creates temp directory
+     *
+     * @return $this
+     */
+    protected function createTempDirectory()
+    {
+        $tempDirectoryPath = $this->settings->getAbsoluteTempDirectoryPath();
+        if (!is_dir($tempDirectoryPath)) {
+            GeneralUtility::mkdir_deep($tempDirectoryPath);
+        }
+        return $this;
+    }
+
+    /**
+     * @return string
+     * @throws \B13\Format\Exception
+     */
+    protected function getContentParameter()
+    {
+        if ($this->settings->hasContent()) {
+            $htmlTempFile = $this->settings->getAbsoluteHtmlTempFilePath();
+            if (!file_put_contents($htmlTempFile, $this->settings->getContent())) {
+                throw new \B13\Format\Exception('Cannot write html content to ' . $htmlTempFile, 1508825187);
+            }
+            GeneralUtility::fixPermissions($htmlTempFile);
+            $contentParameter = $htmlTempFile;
+        } elseif (!empty($this->settings->getUrl())) {
+            $contentParameter = $this->settings->hasContent() ? '-' : $this->settings->getUrl();
+        } else {
+            throw new \B13\Format\Exception('Invalid settings: need content or url', 1508825186);
+        }
+        return $contentParameter;
+    }
 }

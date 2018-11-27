@@ -1,0 +1,29 @@
+plugin.tx_format {
+  settings {
+    typeNum = 1386239798
+    pdf {
+      // Path to the wkhtmltopdf binary
+      binaryFilePath = /usr/local/bin/wkhtmltopdf
+      tempDirectoryPath = /tmp/
+      tempFileName =
+      cacheSeconds = 3600
+      // If set the fileName will be appended with X characters of the md5 hash of the content
+      md5Length = 0
+      printMediaTypeAttribute = 1
+      lowQualityAttribute = 0
+      footerHtmlAttribute =
+      url =
+      minimumFontSize = 15
+      marginLeft = 10
+      marginRight = 10
+      marginTop = 10
+      marginBottom = 10
+      pageSize =
+      // 200 is default for wkhtmltopdf
+      javaScriptDelay = 200
+      orientation = Portrait
+      // Whether a generated PDF should be kept at the end of the process. By default it is deleted
+      persistPDF = 0
+    }
+  }
+}
