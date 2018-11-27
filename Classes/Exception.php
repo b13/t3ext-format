@@ -4,7 +4,7 @@ namespace B13\Format;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Achim Fritz <af@lightwerk.com>, Lightwerk
+ *  (c) 2017 Achim Fritz
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is

@@ -4,8 +4,8 @@ namespace B13\Format\Pdf;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Lars Peipmann <lp@lightwerk.com>, Lightwerk GmbH
- *  (c) 2016 Daniel Goerz <dlg@lightwerk.com>, Lightwerk GmbH
+ *  (c) 2013 Lars Malach
+ *  (c) 2016 Daniel Goerz
  *
  *  All rights reserved
  *

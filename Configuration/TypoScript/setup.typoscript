@@ -1,25 +1,26 @@
 plugin.tx_format {
-    settings {
-        pdf {
-            binaryFilePath = {$plugin.tx_format.settings.pdf.binaryFilePath}
-            tempDirectoryPath = {$plugin.tx_format.settings.pdf.tempDirectoryPath}
-            tempFileName = {$plugin.tx_format.settings.pdf.tempFileName}
-            cacheSeconds = {$plugin.tx_format.settings.pdf.cacheSeconds}
-            md5Length = {$plugin.tx_format.settings.pdf.md5Length}
-            printMediaTypeAttribute = {$plugin.tx_format.settings.pdf.printMediaTypeAttribute}
-            lowQualityAttribute = {$plugin.tx_format.settings.pdf.lowQualityAttribute}
-            footerHtmlAttribute = {$plugin.tx_format.settings.pdf.footerHtmlAttribute}
-            url = {$plugin.tx_format.settings.pdf.url}
-            pageSize = {$plugin.tx_format.settings.pdf.pageSize}
-            minimumFontSize = {$plugin.tx_format.settings.pdf.minimumFontSize}
-            marginLeft = {$plugin.tx_format.settings.pdf.marginLeft}
-            marginRight = {$plugin.tx_format.settings.pdf.marginRight}
-            marginTop = {$plugin.tx_format.settings.pdf.marginTop}
-            marginBottom = {$plugin.tx_format.settings.pdf.marginBottom}
-            javaScriptDelay = {$plugin.tx_format.settings.pdf.javaScriptDelay}
-            orientation = {$plugin.tx_format.settings.pdf.orientation}
-        }
+  settings {
+    pdf {
+      binaryFilePath = {$plugin.tx_format.settings.pdf.binaryFilePath}
+      tempDirectoryPath = {$plugin.tx_format.settings.pdf.tempDirectoryPath}
+      tempFileName = {$plugin.tx_format.settings.pdf.tempFileName}
+      cacheSeconds = {$plugin.tx_format.settings.pdf.cacheSeconds}
+      md5Length = {$plugin.tx_format.settings.pdf.md5Length}
+      printMediaTypeAttribute = {$plugin.tx_format.settings.pdf.printMediaTypeAttribute}
+      lowQualityAttribute = {$plugin.tx_format.settings.pdf.lowQualityAttribute}
+      footerHtmlAttribute = {$plugin.tx_format.settings.pdf.footerHtmlAttribute}
+      url = {$plugin.tx_format.settings.pdf.url}
+      pageSize = {$plugin.tx_format.settings.pdf.pageSize}
+      minimumFontSize = {$plugin.tx_format.settings.pdf.minimumFontSize}
+      marginLeft = {$plugin.tx_format.settings.pdf.marginLeft}
+      marginRight = {$plugin.tx_format.settings.pdf.marginRight}
+      marginTop = {$plugin.tx_format.settings.pdf.marginTop}
+      marginBottom = {$plugin.tx_format.settings.pdf.marginBottom}
+      javaScriptDelay = {$plugin.tx_format.settings.pdf.javaScriptDelay}
+      orientation = {$plugin.tx_format.settings.pdf.orientation}
+      persistPDF = {$plugin.tx_format.settings.pdf.persistPDF}
     }
+  }
 }
 
 module.tx_format < plugin.tx_format
