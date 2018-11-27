@@ -1,0 +1,14 @@
+{
+	"name": "b13/format",
+	"type": "typo3-cms-extension",
+	"homepage": "https://github.com/b13/t3ext-format",
+	"autoload": {
+		"psr-4": {
+			"B13\\Format\\": "Classes"
+		}
+	},
+	"require": {
+		"typo3/cms-core": "^8.7",
+		"phpoffice/phpspreadsheet": "^1.5"
+	}
+}
