@@ -181,6 +181,7 @@ class CsvService
      * formats a value to be compatible with the CSV output
      *
      * @param mixed $value
+     * @param string $delimiter
      * @return string
      */
     protected function formatValue($value, $delimiter = ';')
