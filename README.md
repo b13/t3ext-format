@@ -1,4 +1,4 @@
-#TYPO3 Extension format
+# TYPO3 Extension format
 
 Utility Extension for putting data in different formats like
 
