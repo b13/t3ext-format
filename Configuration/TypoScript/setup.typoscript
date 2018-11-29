@@ -4,7 +4,6 @@ plugin.tx_format {
       binaryFilePath = {$plugin.tx_format.settings.pdf.binaryFilePath}
       tempDirectoryPath = {$plugin.tx_format.settings.pdf.tempDirectoryPath}
       tempFileName = {$plugin.tx_format.settings.pdf.tempFileName}
-      cacheSeconds = {$plugin.tx_format.settings.pdf.cacheSeconds}
       md5Length = {$plugin.tx_format.settings.pdf.md5Length}
       printMediaTypeAttribute = {$plugin.tx_format.settings.pdf.printMediaTypeAttribute}
       lowQualityAttribute = {$plugin.tx_format.settings.pdf.lowQualityAttribute}
@@ -19,6 +18,7 @@ plugin.tx_format {
       javaScriptDelay = {$plugin.tx_format.settings.pdf.javaScriptDelay}
       orientation = {$plugin.tx_format.settings.pdf.orientation}
       persistPDF = {$plugin.tx_format.settings.pdf.persistPDF}
+      additionalAttributes = {$plugin.tx_format.settings.pdf.additionalAttributes}
     }
   }
 }

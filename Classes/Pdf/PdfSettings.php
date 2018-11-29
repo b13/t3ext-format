@@ -56,11 +56,6 @@ class PdfSettings
     protected $tempFileName;
 
     /**
-     * @var integer
-     */
-    protected $cacheSeconds = 3600;
-
-    /**
      * If set the fileName will be appended with X characters of the md5 hash of the content
      *
      * @var integer
@@ -145,6 +140,11 @@ class PdfSettings
     /**
      * @var string
      */
+    protected $additionalAttributes = '';
+
+    /**
+     * @var string
+     */
     protected $fullTempFileName = '';
 
     /**
@@ -222,28 +222,6 @@ class PdfSettings
     public function setBinaryFilePath($binaryFilePath)
     {
         $this->binaryFilePath = $binaryFilePath;
-        return $this;
-    }
-
-    /**
-     * Returns cache seconds
-     *
-     * @return integer
-     */
-    public function getCacheSeconds()
-    {
-        return $this->cacheSeconds;
-    }
-
-    /**
-     * Sets cache seconds
-     *
-     * @param integer $cacheSeconds
-     * @return $this
-     */
-    public function setCacheSeconds($cacheSeconds)
-    {
-        $this->cacheSeconds = $cacheSeconds;
         return $this;
     }
 
@@ -796,6 +774,27 @@ class PdfSettings
             return ' --javascript-delay ' . (int)$this->javaScriptDelay;
         }
         return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdditionalAttributes(): string
+    {
+        if (!empty($this->additionalAttributes)) {
+            return ' ' . trim($this->additionalAttributes);
+        }
+       return '';
+    }
+
+    /**
+     * @param string $additionalAttributes
+     * @return $this
+     */
+    public function setAdditionalAttributes($additionalAttributes)
+    {
+        $this->additionalAttributes = $additionalAttributes;
+        return $this;
     }
 
     public function __destruct()

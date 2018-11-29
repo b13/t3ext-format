@@ -112,6 +112,7 @@ class PdfService
             $this->settings->getOrientationAttribute() .
             $this->settings->getMarginAttributes() .
             $this->settings->getPageSizeAttribute() .
+            $this->settings->getAdditionalAttributes() .
             ' ' . $contentParameter . ' ' . $this->settings->getAbsoluteTempFilePath();
 
         exec($command, $res, $ret);
