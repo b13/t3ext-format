@@ -48,6 +48,7 @@ class CsvService
                     }
                     $currentField = '';
                     $fieldsStack = [];
+                    $skippedQuote = false;
                 }
                 // is it the end of a field or just within in the quote?
             } elseif ($str{$i} == $delimiter) {
@@ -56,6 +57,7 @@ class CsvService
                 } else {
                     $fieldsStack[] = $currentField;
                     $currentField = '';
+                    $skippedQuote = false;
                 }
             } elseif ($useQualifier && $str{$i} == $qualifier) {
                 if ($isInQuote) {
@@ -69,6 +71,7 @@ class CsvService
                 } else {
                     if ($skippedQuote) {
                         $skippedQuote = false;
+                        $currentField .= $qualifier;
                     }
                     $isInQuote = true;
                 }
