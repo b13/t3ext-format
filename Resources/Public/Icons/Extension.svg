@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 256 256" style="enable-background:new 0 0 256 256;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#696FAB;}
+	.st1{fill:#FFFFFF;}
+	.st2{opacity:0.3;fill:#696FAB;}
+</style>
+<rect y="0" class="st0" width="256" height="256"/>
+<title>EXT:format</title>
+<path class="st1" d="M191.4,228.6H64.6c-9.5,0-17.1-7.7-17.1-17.1v-167c0-9.5,7.7-17.1,17.1-17.1h83.5l60.4,60.4v123.8
+	C208.5,221,200.8,228.6,191.4,228.6z"/>
+<polygon class="st2" points="208.5,87.7 148.1,27.4 148.1,87.7 "/>
+<title>ext_icon_crawler_transparent2</title>
+<path class="st0" d="M169.7,151.3l-18.5,18.5v13.9l32.4-32.4l-32.4-32.4v13.9L169.7,151.3z M72.4,188.4c11.6-16.2,27.8-23.6,51-23.6
+	v19l32.4-32.4l-32.4-32.4v18.5C90.9,142,77,165.2,72.4,188.4z"/>
+</svg>
