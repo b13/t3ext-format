@@ -74,13 +74,13 @@ class PdfService
         header('Pragma: no-cache', true);
         header('Expires: 0', true);
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0', true);
-        header('Cache-Control :private');
+        header('Cache-Control: private');
         header('Content-Type: application/pdf', true);
 
         $agent = strtolower(GeneralUtility::getIndpEnv('HTTP_USER_AGENT'));
         $dispo = (strpos($agent, 'win') !== false && strpos($agent, 'msie') !== false) ? '' : 'attachment; ';
 
-        header('Content-Transfer-Encodin :binary', true);
+        header('Content-Transfer-Encoding: binary', true);
         header('Content-Disposition: ' . $dispo . 'filename="' . $fileName . '"', true);
         header('Content-Length: ' . filesize($absoluteFilePath), true);
 
