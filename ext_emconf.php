@@ -17,7 +17,7 @@ $EM_CONF[$_EXTKEY] = [
     'clearCacheOnLoad' => 0,
     'lockType' => '',
     'author_company' => 'b:dreizehn, Stuttgart',
-    'version' => '2.0.0',
+    'version' => '2.0.1',
     'constraints' => [
         'depends' => [
             'typo3' => '>=7.6.0 <=9.6.0'
@@ -27,4 +27,3 @@ $EM_CONF[$_EXTKEY] = [
     ],
     'suggests' => [],
 ];
-
