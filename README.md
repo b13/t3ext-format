@@ -32,7 +32,7 @@ The extension provides a PdfService. here is an example usage:
 ```
 $pdfService = GeneralUtility::makeInstance(PdfService::class);
 $pdfService->setContent($myHtml);
-$absolutepathToFile = $pdfService->saveToFile('myPdf.pdf');
+$absolutepathToFile = $pdfService->saveToFile('myPdf');
 ```
 
 This will create a file `myPdf.pdf` with the contents of `$myHtml` in a directory that can be configured in TypoScript.
