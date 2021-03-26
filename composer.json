@@ -3,6 +3,11 @@
 	"type": "typo3-cms-extension",
 	"homepage": "https://github.com/b13/t3ext-format",
 	"license": "GPL-2.0-or-later",
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "format"
+		}
+	},
 	"autoload": {
 		"psr-4": {
 			"B13\\Format\\": "Classes"
