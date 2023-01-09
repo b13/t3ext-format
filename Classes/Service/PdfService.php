@@ -1,6 +1,8 @@
 <?php
+
 namespace B13\Format\Service;
 
+use B13\Format\Exception;
 use B13\Format\Pdf\PdfSettings;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
@@ -11,8 +13,6 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  * Class to create a pdf and output it
  *
  * @author	b:dreizehn GmbH <typo3@b13.de>
- * @package	TYPO3
- * @subpackage	tx_format
  */
 class PdfService
 {
@@ -24,18 +24,15 @@ class PdfService
     /**
      * @var PdfSettings
      */
-    protected $settings = null;
+    protected $settings;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $configurationManager = $objectManager->get(ConfigurationManager::class);
         $settings = $configurationManager->getConfiguration(
-        ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-        'format'
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+            'format'
         );
         $this->setSettings($settings['pdf'] ?? []);
     }
@@ -66,7 +63,6 @@ class PdfService
 
     /**
      * @param $fileName
-     * @return void
      */
     public function saveToOutput(string $fileName)
     {
@@ -92,7 +88,7 @@ class PdfService
     /**
      * @param string $filename
      * @return string
-     * @throws \B13\Format\Exception
+     * @throws Exception
      */
     public function saveToFile(string $filename = ''): string
     {
@@ -117,7 +113,7 @@ class PdfService
 
         exec($command, $res, $ret);
         if ($ret !== 0) {
-            throw new \B13\Format\Exception('cannot execute ' . $command, 1508825188);
+            throw new Exception('cannot execute ' . $command, 1508825188);
         }
         return $this->settings->getAbsoluteTempFilePath();
     }
@@ -138,21 +134,21 @@ class PdfService
 
     /**
      * @return string
-     * @throws \B13\Format\Exception
+     * @throws Exception
      */
     protected function getContentParameter()
     {
         if ($this->settings->hasContent()) {
             $htmlTempFile = $this->settings->getAbsoluteHtmlTempFilePath();
             if (!file_put_contents($htmlTempFile, $this->settings->getContent())) {
-                throw new \B13\Format\Exception('Cannot write html content to ' . $htmlTempFile, 1508825187);
+                throw new Exception('Cannot write html content to ' . $htmlTempFile, 1508825187);
             }
             GeneralUtility::fixPermissions($htmlTempFile);
             $contentParameter = $htmlTempFile;
         } elseif (!empty($this->settings->getUrl())) {
             $contentParameter = $this->settings->hasContent() ? '-' : $this->settings->getUrl();
         } else {
-            throw new \B13\Format\Exception('Invalid settings: need content or url', 1508825186);
+            throw new Exception('Invalid settings: need content or url', 1508825186);
         }
         return $contentParameter;
     }

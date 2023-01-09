@@ -1,5 +1,9 @@
 <?php
+
 namespace B13\Format\Pdf;
+
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
  *  Copyright notice
@@ -28,13 +32,9 @@ namespace B13\Format\Pdf;
 
 /**
  * PDF Settings
- *
- * @package TYPO3
- * @subpackage format
  */
 class PdfSettings
 {
-
     const ORIENTATION_PORTRAIT = 'Portrait';
     const ORIENTATION_LANDSCAPE = 'Landscape';
 
@@ -58,12 +58,12 @@ class PdfSettings
     /**
      * If set the fileName will be appended with X characters of the md5 hash of the content
      *
-     * @var integer
+     * @var int
      */
     protected $md5Length = 0;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $printMediaTypeAttribute = false;
 
@@ -78,7 +78,7 @@ class PdfSettings
     protected $footerHtmlAttribute;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $lowQualityAttribute;
 
@@ -88,7 +88,7 @@ class PdfSettings
     protected $url;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $minimumFontSize = 0;
 
@@ -102,22 +102,22 @@ class PdfSettings
     /**
      * @var int|null
      */
-    protected $marginRight = null;
+    protected $marginRight;
 
     /**
      * @var int|null
      */
-    protected $marginLeft = null;
+    protected $marginLeft;
 
     /**
      * @var int|null
      */
-    protected $marginTop = null;
+    protected $marginTop;
 
     /**
      * @var int|null
      */
-    protected $marginBottom = null;
+    protected $marginBottom;
 
     /**
      * @var int
@@ -128,7 +128,7 @@ class PdfSettings
      * @var string
      * default of wkhtmltopdf is A4
      */
-    protected $pageSize = null;
+    protected $pageSize;
 
     /**
      * Whether a generated PDF should be kept at the end of the process. By default it is deleted
@@ -200,7 +200,7 @@ class PdfSettings
      */
     protected function getAbsoluteFilePath($filePath)
     {
-        return $filePath{0} === '/' ? $filePath : \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($filePath);
+        return $filePath[0] === '/' ? $filePath : GeneralUtility::getFileAbsFileName($filePath);
     }
 
     /**
@@ -232,7 +232,7 @@ class PdfSettings
      */
     public function getPublicTempFileUrl()
     {
-        return '/' . substr($this->getAbsoluteTempFilePath(), strlen(PATH_site));
+        return '/' . substr($this->getAbsoluteTempFilePath(), strlen(Environment::getPublicPath() + 1));
     }
 
     /**
@@ -313,8 +313,8 @@ class PdfSettings
     public function getTempFileName()
     {
         $tempFileName = preg_replace(
-            array('/ä/', '/ö/', '/ü/', '/Ä/', '/Ö/', '/Ü/', '/ß/', '/ /', '/[^0-9A-Za-z\_\.\-]/'),
-            array('ae', 'oe', 'ue', 'Ae', 'Oe', 'Ue', 'ss', '_', ''),
+            ['/ä/', '/ö/', '/ü/', '/Ä/', '/Ö/', '/Ü/', '/ß/', '/ /', '/[^0-9A-Za-z\_\.\-]/'],
+            ['ae', 'oe', 'ue', 'Ae', 'Oe', 'Ue', 'ss', '_', ''],
             trim($this->tempFileName)
         );
         return $tempFileName;
@@ -335,7 +335,7 @@ class PdfSettings
     /**
      * Returns Md5 Length
      *
-     * @return integer
+     * @return int
      */
     public function getMd5Length()
     {
@@ -345,7 +345,7 @@ class PdfSettings
     /**
      * Sets Md5 Length
      *
-     * @param integer $md5Length
+     * @param int $md5Length
      * @return $this
      */
     public function setMd5Length($md5Length)
@@ -357,7 +357,7 @@ class PdfSettings
     /**
      * Does this object has a value in content?
      *
-     * @return boolean
+     * @return bool
      */
     public function hasContent()
     {
@@ -411,7 +411,7 @@ class PdfSettings
     /**
      * Does this object has a value in url?
      *
-     * @return boolean
+     * @return bool
      */
     public function hasUrl()
     {
@@ -464,7 +464,7 @@ class PdfSettings
     /**
      * Enables/disables media type attribute
      *
-     * @param boolean $boolean
+     * @param bool $boolean
      * @return $this
      */
     public function setPrintMediaTypeAttribute($boolean = true)
@@ -490,7 +490,6 @@ class PdfSettings
      * Sets footer html attribute
      *
      * @param string $footerHtmlAttribute
-     * @return void
      */
     public function setFooterHtmlAttribute($footerHtmlAttribute)
     {
@@ -513,7 +512,7 @@ class PdfSettings
     /**
      * Enables/disables low quality
      *
-     * @param boolean $boolean
+     * @param bool $boolean
      * @return $this
      */
     public function setLowQualityAttribute($boolean = true)
@@ -563,7 +562,7 @@ class PdfSettings
      */
     public function setMinimumFontSize($minimumFontSize)
     {
-        $this->minimumFontSize = intval($minimumFontSize);
+        $this->minimumFontSize = (int)$minimumFontSize;
         return $this;
     }
 
@@ -784,7 +783,7 @@ class PdfSettings
         if (!empty($this->additionalAttributes)) {
             return ' ' . trim($this->additionalAttributes);
         }
-       return '';
+        return '';
     }
 
     /**

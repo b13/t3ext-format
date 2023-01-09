@@ -1,4 +1,5 @@
 <?php
+
 namespace B13\Format;
 
 /***************************************************************
@@ -26,10 +27,7 @@ namespace B13\Format;
 
 /**
  * Exception
- *
- * @package TYPO3
- * @subpackage tx_format
  */
-class Exception extends \TYPO3\CMS\Core\Exception {
-
+class Exception extends \TYPO3\CMS\Core\Exception
+{
 }

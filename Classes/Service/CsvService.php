@@ -8,8 +8,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Work Class "csv" that takes care of all the work with CSVs
  *
  * @author    Benjamin Mack <typo3@b13.de>
- * @package    TYPO3
- * @subpackage    Tx_Format
  */
 class CsvService
 {
@@ -88,14 +86,12 @@ class CsvService
         return $recordsStack;
     }
 
-
     /***
      * Part 2... Creating
      ***/
 
     /**
      * @param $data
-     * @return void
      */
     public function addData($data)
     {
@@ -104,7 +100,6 @@ class CsvService
 
     /**
      * @param $data
-     * @return void
      */
     public function setData($data)
     {
@@ -118,7 +113,6 @@ class CsvService
      * @param string $delimiter
      * @param string $linedelimiter
      * @param bool $convertToLatin
-     * @return void
      */
     public function saveToOutput($filename = 'export', $delimiter = ';', $linedelimiter = null, $convertToLatin = true)
     {
